@@ -10,9 +10,9 @@ def open_and_read_file(file_path):
     the file's contents as one string of text.
     """
 
-    # your code goes here
+    text = open(file_path).read()
 
-    return 'Contents of your file as one long string'
+    return text
 
 
 def make_chains(text_string):
@@ -25,7 +25,7 @@ def make_chains(text_string):
     For example:
 
         >>> chains = make_chains('hi there mary hi there juanita')
-
+                                
     Each bigram (except the last) will be a key in chains:
 
         >>> sorted(chains.keys())
@@ -39,22 +39,39 @@ def make_chains(text_string):
         >>> chains[('there','juanita')]
         [None]
     """
+    # {('hi', 'there'):['mary', 'juanita'], ('mary', 'hi'):['there'], ('there', 'mary'):['hi'], ('there', 'juanita'):None}
 
     chains = {}
+    clean_string = text_string.split()
+    for i in range(len(clean_string) - 2):
 
-    # your code goes here
+        if len(chains.get((clean_string[i], clean_string[i+1]),[])) == 0:
+            chains[(clean_string[i], clean_string[i+1])] = chains.get((clean_string[i], clean_string[i+1]),[clean_string[i+2]])
+        else:
+            chains[(clean_string[i], clean_string[i+1])].append(clean_string[i+2])
+
+    chains[(clean_string[-2], clean_string[-1])] = [None]
 
     return chains
-
 
 def make_text(chains):
     """Return text from chains."""
 
     words = []
+    
+    key = choice(list(chains.keys()))
+    words.extend(key)
+    value = choice(key)
+    words.append(value)
 
-    # your code goes here
+    # i am not sure what to do if the chains(words[-2], words[-1]) doesn't exist. How do I select a valid key then?
+    while len(chains.get((words[-2], words[-1]),[]) > 0:
+        new_key = (words[-2], words[-1])
+        value = choice(new_key)
+        words.append(value)
 
     return ' '.join(words)
+
 
 
 input_path = 'green-eggs.txt'
